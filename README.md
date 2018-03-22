@@ -97,7 +97,7 @@ Put it all together, and you might do something like this.
 import tello
 import time
 
-drone = tello.Tello('192.168.10.1', 8888)
+drone = tello.Tello('192.168.10.2', 8888)
 
 drone.takeoff()
 time.sleep(5)
