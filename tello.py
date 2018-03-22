@@ -162,7 +162,7 @@ class Tello:
         This method expects meters or feet. The Tello API expects distances
         from 20 to 500 centimeters.
 
-        Metric: .02 to 5 meters
+        Metric: .1 to 5 meters
         Imperial: .7 to 16.4 feet
 
         Args:
