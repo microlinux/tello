@@ -23,14 +23,15 @@ CREATE A MAGIC TELLO OBJECT
 Tello objects require a minimum of 2 parameters to initialize, the local IP
 address and port to bind.
 
-Ex. drone = tello.Tello('192.168.10.2', 8888)
+Ex. `drone = tello.Tello('192.168.10.2', 8888)`
 
 Methods that require distance or speed parameters expect feet or MPH. Include
 parameter imperial=False for meters and KPH.
 
 Ex. `drone = tello.Tello('192.168.10.2', 8888, imperial=False)`
 
-If you send a command to the Tello and it doesn't respond within .3 seconds, a
+If you send a non-movement command to the Tello and it doesn't respond within .3 seconds, 
+or a movement command and it doesn't respond in 5 seconds, a
 RuntimeError is raised. You may specify the number of seconds to wait with the
 one of two timeout parameters: command\_timeout or move\_timeout.
 
