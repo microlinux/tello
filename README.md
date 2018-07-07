@@ -32,9 +32,12 @@ Ex. `drone = tello.Tello('192.168.10.2', 8888, imperial=False)`
 
 If you send a command to the Tello and it doesn't respond within .3 seconds, a
 RuntimeError is raised. You may specify the number of seconds to wait with the
-timeout parameter.
+one of two timeout parameters: command\_timeout or move\_timeout.
 
-Ex. `drone = tello.Tello('192.168.10.2', 8888, imperial=False, timeout=.5)`
+Ex. `drone = tello.Tello('192.168.10.3', 8888, imperial=False, move_timeout=5, command_timeout=0.5)`
+
+The command\_timeout is used for "simple" commands (set\_speed, get\_speed, get\_battery).
+The move\_timeout is used for all "movement" related commands.
 
 When you initialize a Tello object, it attempts to connect to the Tello and
 enter command mode. If this fails, a RuntimeError is raised.
@@ -47,7 +50,6 @@ Tello. It will respond with 'OK', 'FALSE' or a numeric value, which the methods
 return.
 
 These methods do what you'd expect. Responses are 'OK' or 'FALSE'.
-
 ```python
 Tello.takeoff()
 Tello.land()
