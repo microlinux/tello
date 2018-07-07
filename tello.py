@@ -21,11 +21,12 @@ import socket
 import threading
 import time
 import traceback
+import logging
 
 class Tello:
     """Wrapper to simply interactions with the Ryze Tello drone."""
 
-    def __init__(self, local_ip, local_port, imperial=True, command_timeout=.3, tello_ip='192.168.10.1', tello_port=8889):
+    def __init__(self, local_ip, local_port, imperial=True, move_timeout=5.0, command_timeout=.3, tello_ip='192.168.10.1', tello_port=8889):
         """Binds to the local IP/port and puts the Tello into command mode.
 
         Args:
@@ -41,23 +42,31 @@ class Tello:
             RuntimeError: If the Tello rejects the attempt to enter command mode.
 
         """
+        self.log = logging.getLogger('Tello')
 
         self.abort_flag = False
         self.command_timeout = command_timeout
+        self.move_timeout = move_timeout
         self.imperial = imperial
         self.response = None
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.tello_address = (tello_ip, tello_port)
+        self.command = None
+        self.log.info("Tello, connecting %s to %s:%s", local_ip, tello_ip, tello_port)
 
-        self.socket.bind((local_ip, local_port))
+        try:
+            self.socket.bind((local_ip, local_port))
+        except Exception as ex:
+            raise RuntimeError('Unable to connect to Tello')
 
         self.receive_thread = threading.Thread(target=self._receive_thread)
         self.receive_thread.daemon=True
 
         self.receive_thread.start()
 
-        if self.send_command('command') != 'OK':
+        if self.send_command('command', self.command_timeout) != 'OK':
             raise RuntimeError('Tello rejected attempt to enter command mode')
+
 
     def __del__(self):
         """Closes the local socket."""
@@ -73,6 +82,7 @@ class Tello:
         while True:
             try:
                 self.response, ip = self.socket.recvfrom(256)
+                self.log.debug("_receive_thread %s", self.response)
             except Exception:
                 break
 
@@ -87,7 +97,7 @@ class Tello:
 
         """
 
-        return self.send_command('flip %s' % direction)
+        return self.send_command('flip %s' % direction, self.command_timeout)
 
     def get_battery(self):
         """Returns percent battery life remaining.
@@ -97,7 +107,7 @@ class Tello:
 
         """
 
-        battery = self.send_command('battery?')
+        battery = self.send_command('battery?', self.command_timeout)
 
         try:
             battery = int(battery)
@@ -115,7 +125,7 @@ class Tello:
 
         """
 
-        flight_time = self.send_command('time?')
+        flight_time = self.send_command('time?', self.command_timeout)
 
         try:
             flight_time = int(flight_time)
@@ -132,7 +142,7 @@ class Tello:
 
         """
 
-        speed = self.send_command('speed?')
+        speed = self.send_command('speed?', self.command_timeout)
 
         try:
             speed = float(speed)
@@ -154,7 +164,7 @@ class Tello:
 
         """
 
-        return self.send_command('land')
+        return self.send_command('land', self.move_timeout)
 
     def move(self, direction, distance):
         """Moves in a direction for a distance.
@@ -181,7 +191,7 @@ class Tello:
         else:
             distance = int(round(distance * 100))
 
-        return self.send_command('%s %s' % (direction, distance))
+        return self.send_command('%s %s' % (direction, distance), self.move_timeout)
 
     def move_backward(self, distance):
         """Moves backward for a distance.
@@ -267,7 +277,7 @@ class Tello:
 
         return self.move('up', distance)
 
-    def send_command(self, command):
+    def send_command(self, command, timeout):
         """Sends a command to the Tello and waits for a response.
 
         If self.command_timeout is exceeded before a response is received,
@@ -285,8 +295,9 @@ class Tello:
         """
 
         self.abort_flag = False
-        timer = threading.Timer(self.command_timeout, self.set_abort_flag)
-
+        timer = threading.Timer(timeout, self.set_abort_flag)
+        self.log.debug("send_command %s", command)
+        self.command = command
         self.socket.sendto(command.encode('utf-8'), self.tello_address)
 
         timer.start()
@@ -301,6 +312,9 @@ class Tello:
         self.response = None
 
         return response
+
+    def get_last_command(self):
+        return self.command
 
     def set_abort_flag(self):
         """Sets self.abort_flag to True.
@@ -336,7 +350,7 @@ class Tello:
         else:
             speed = int(round(speed * 27.7778))
 
-        return self.send_command('speed %s' % speed)
+        return self.send_command('speed %s' % speed, self.command_timeout)
 
     def takeoff(self):
         """Initiates take-off.
@@ -346,7 +360,7 @@ class Tello:
 
         """
 
-        return self.send_command('takeoff')
+        return self.send_command('takeoff', self.move_timeout)
 
     def rotate_cw(self, degrees):
         """Rotates clockwise.
@@ -359,7 +373,7 @@ class Tello:
 
         """
 
-        return self.send_command('cw %s' % degrees)
+        return self.send_command('cw %s' % degrees, self.move_timeout)
 
     def rotate_ccw(self, degrees):
         """Rotates counter-clockwise.
@@ -371,4 +385,4 @@ class Tello:
             str: Response from Tello, 'OK' or 'FALSE'.
 
         """
-        return self.send_command('ccw %s' % degrees)
+        return self.send_command('ccw %s' % degrees, self.move_timeout)
