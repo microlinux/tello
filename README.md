@@ -10,7 +10,7 @@ The Tello has an IP address of `192.168.10.1`. The device sending commands must
 be connected to the Tello WiFi network and have an IP in the `192.168.10.0/24`
 range.
 
-### Create a Tello Object
+### Creating a Tello Object
 
 A Tello object requires 2 parameters to initialize, an IP address and port to 
 bind.
