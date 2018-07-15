@@ -1,6 +1,6 @@
 # Python Tello
 
-A Python interface for the DJI Ryze Tello drone.
+A Python interface for the [Ryze Tello](https://www.ryzerobotics.com/tello) drone.
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ timeout parameter.
 When you initialize a Tello object, it attempts to connect to the Tello and
 enter command mode. If this fails, a RuntimeError is raised.
 
-### Performing actions
+### Performing Actions
 
 Once initialized, a number of methods are available to send commands to the
 Tello. It will respond with `'OK'`, `'FALSE'` or a numeric value, which the 
