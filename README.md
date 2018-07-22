@@ -1,3 +1,8 @@
+FORKED(original code was a python interface)
+
+The purpose of forking this repository is to create in essence a drone I can command with my voice, through microphone setup I would to with the use of two Network Interface Adapters have one connected to the drone relaying my request back and forward from the drone and the other connected to the net sending these voice requests to a google API with the Speech-to-Text API so that I can in effect use these returns as inputs to command the drone
+
+----------------------------------------------------------------------------------------
 DISCLAIMER
 
 I do not own a Tello. This code and documentation is based on the Tello SDK
