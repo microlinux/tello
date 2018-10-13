@@ -125,3 +125,7 @@ time.sleep(10)
 drone.land()
 
 print 'Flight time: %s' % drone.get_flight_time()
+
+TALKATIVE DRONE
+
+Included as well with the tello python interface is a speech.py file showing a typical setup for the mentioned interface. This example also can be further modified to enable fully voice controlled drone flight !!Please not that this functionality requires an internet connection!!
