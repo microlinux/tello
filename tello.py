@@ -56,7 +56,7 @@ class Tello:
 
         self.receive_thread.start()
 
-        if self.send_command('command') != 'OK':
+        if self.send_command('command') != 'ok':
             raise RuntimeError('Tello rejected attempt to enter command mode')
 
     def __del__(self):
