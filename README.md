@@ -1,3 +1,5 @@
+inital fork date: 9 February 2019
+
 DISCLAIMER
 
 I do not own a Tello. This code and documentation is based on the Tello SDK
