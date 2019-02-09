@@ -15,7 +15,7 @@ try:
 
 	print "Reading speed information..."
 
-	drone.get_speed()
+	print "The drone is moving at a speed of %d kmph" % drone.get_speed()
 	
 	print "Success."
 

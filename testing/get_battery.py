@@ -8,6 +8,8 @@ import tello
 
 print "Connecting to Tello drone..."
 
+
+
 try:
 	drone = tello.Tello('192.168.10.2', 8888, False)
 
@@ -15,8 +17,8 @@ try:
 
 	print "Reading battery information..."
 
-	drone.get_battery()
-	
+	print "There is %d percent battery remaining." % drone.get_battery()
+
 	print "Success."
 
 except socket.error:
