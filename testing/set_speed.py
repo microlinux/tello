@@ -13,7 +13,7 @@ try:
 
 	print "Connected to Tello successfully."
 
-	print "Setting the speed to 2 kmpt..."
+	print "Setting the speed to 2 kmph..."
 
 	drone.set_speed(2)
 	
