@@ -52,10 +52,15 @@ The unit of distance is feet or meters. The SDK accepts distances of 1 to 500
 centimeters. Realistically, this translates to .1 - 5 meters or .7 - 16.4 feet.
 
 Tello.move_forward(distance)
+
 Tello.move_backward(distance)
+
 Tello.move_right(distance)
+
 Tello.move_left(distance)
+
 Tello.move_up(distance)
+
 Tello.move_down(distance)
 
 Methods that rotate require a single parameter, degrees. The SDK accepts values
