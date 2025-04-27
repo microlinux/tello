@@ -67,6 +67,7 @@ Methods that rotate require a single parameter, degrees. The SDK accepts values
 from 1 to 360. Responses are 'OK' or 'FALSE'.
 
 Tello.rotate_cw(degrees)
+
 Tello.rotate_ccw(degrees)
 
 The method to set speed requires a single parameter, speed. Responses are 'OK'
